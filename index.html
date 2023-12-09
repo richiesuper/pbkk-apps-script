@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data Diri</title>
+    <style>
+        #form-container {
+            width: 50vw;
+            height: 75vh;
+            margin: 25vh auto auto auto;
+        }
+
+        fieldset {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="form-container">
+        <form method="post" name="data-diri">
+            <fieldset>
+                <legend>Masukkan data diri Anda</legend>
+                <label for="nama">Nama</label>
+                <input type="text" id="nama" name="nama">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email">
+                <label for="jenis-kelamin">Jenis Kelamin</label>
+                <select id="jenis-kelamin" name="jenis_kelamin">
+                    <option value="laki-laki">Laki-laki</option>
+                    <option value="perempuan">Perempuan</option>
+                </select>
+                <label for="alamat">Alamat</label>
+                <textarea id="alamat" name="alamat"></textarea>
+                <label for="tanggal-lahir">Tanggal Lahir</label>
+                <input type="date" id="tanggal-lahir" name="tanggal_lahir">
+                <label for="motto-hidup">Motto Hidup</label>
+                <textarea id="motto-hidup" name="motto_hidup"></textarea>
+                <button type="submit" style="width:100px;margin:auto">Kirim!</button>
+            </fieldset>
+        </form>
+    </div>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby2I7pC5HqKXRlg90A_btwCFK46JnW9Tw3YR_jk11Dvb5TjcPDkjpvTRfN7Fg_qNW9MCQ/exec'
+
+        const form = document.forms['data-diri']
+        const submitButton = form.querySelector('button[type="submit"]')
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            submitButton.innerHTML = 'Mengirim...';
+            submitButton.disabled = true;
+            fetch(scriptURL, { redirect: 'follow', method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    submitButton.innerHTML = 'Kirim!';
+                    submitButton.disabled = false;
+                    form.reset()
+                    console.log('Success!', response)
+                })
+                .catch(error => {
+                    submitButton.innerHTML = 'Kirim!';
+                    submitButton.disabled = false;
+                    console.error('Error!', error.message)
+                })
+        })
+    </script>
+</body>
+
+</html>
